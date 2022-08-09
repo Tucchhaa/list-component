@@ -5,26 +5,31 @@ export type InputOptions = {
     buttonContent: string
 }
 
+export type ClassNames = {
+    list: string;
+    wrapper: string;
+    mainSection: string;
+    selectionSection: string;
+
+    item: string;
+    itemWrapper: string,
+    itemCheckbox: string,
+    itemContent: string,
+    itemContentContainer: string,
+
+    buttonsContainer: string,
+    deleteBtn: string,
+    editBtn: string,
+
+    inputWrapper: string,
+    inputContainer: string,
+    input: string,
+    submitButtonContainer: string,
+    submitButton: string
+}
+
 export type ListComponentOptions = {
-    classNames: {
-        list: string;
-
-        item: string;
-        itemWrapper: string,
-        itemCheckbox: string,
-        itemContent: string,
-        itemContentContainer: string,
-
-        buttonsContainer: string,
-        deleteBtn: string,
-        editBtn: string,
-
-        inputWrapper: string,
-        inputContainer: string,
-        input: string,
-        submitButtonContainer: string,
-        submitButton: string
-    },
+    classNames: ClassNames,
 
     inputs: {
         addItem: InputOptions,

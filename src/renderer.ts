@@ -1,14 +1,16 @@
-import { ListComponentOptions, Item, InputOptions, TagNames, HTMLElementsInfo } from "./types";
+import { ListComponentOptions, Item, InputOptions, TagNames, HTMLElementsInfo, ClassNames } from "./types";
 
 export class Renderer {
     container: HTMLElement;
     options: ListComponentOptions;
     htmlElements: HTMLElementsInfo;
+    classNames: ClassNames;
 
     constructor(container: HTMLElement, options: ListComponentOptions, htmlElements: HTMLElementsInfo) {
         this.container = container;
         this.options = options;
         this.htmlElements = htmlElements;
+        this.classNames = options.classNames;
     }
 
     render(list: Item[]) {
@@ -19,7 +21,7 @@ export class Renderer {
         const mainSection = this.renderMainSection(list);
         const selectionSection = this.renderSelectionSection(list);
 
-        const wrapper = this.createContainer("row", [mainSection, selectionSection]);
+        const wrapper = this.createContainer(this.classNames.wrapper, [mainSection, selectionSection]);
 
         fragment.appendChild(wrapper);
 
@@ -30,11 +32,11 @@ export class Renderer {
         const inputs = this.renderInputs();
         const listNode = this.renderList(list);
 
-        return this.createContainer("col", [inputs, listNode]);
+        return this.createContainer(this.classNames.mainSection, [inputs, listNode]);
     }
 
     private renderSelectionSection(list: Item[]) {
-        return this.createContainer("col", []);
+        return this.createContainer(this.classNames.selectionSection, []);
     }
 
     private renderInputs() {
@@ -45,7 +47,7 @@ export class Renderer {
     }
 
     private renderInput(inputOptions: InputOptions) {
-        const { classNames } = this.options;
+        const { classNames } = this;
 
         // Render input
         const input = <HTMLInputElement>this.createDOMNode("input", classNames.input);
@@ -74,7 +76,7 @@ export class Renderer {
     }
 
     private renderList(list: Item[]) {
-        const listNode = this.createDOMNode("ul", this.options.classNames.list);
+        const listNode = this.createDOMNode("ul", this.classNames.list);
 
         for(const item of list) {
             const itemNode = this.renderItem(item);
@@ -86,12 +88,12 @@ export class Renderer {
     }
 
     private renderItem(item: Item) {
-        const itemNode = this.createDOMNode("li", this.options.classNames.item);
+        const itemNode = this.createDOMNode("li", this.classNames.item);
 
         const content = this.renderContent(item);
         const buttons = this.renderButtons(item);
 
-        const container = this.createContainer(this.options.classNames.itemWrapper, [content, buttons])
+        const container = this.createContainer(this.classNames.itemWrapper, [content, buttons])
 
         itemNode.appendChild(container);
 
@@ -102,9 +104,9 @@ export class Renderer {
 
     private renderContent(item: Item) {
         const checkbox = this.createCheckbox();
-        const content = this.createDOMNode("span", this.options.classNames.itemContent, item.content);
+        const content = this.createDOMNode("span", this.classNames.itemContent, item.content);
 
-        return this.createContainer(this.options.classNames.itemContentContainer, [checkbox, content]);
+        return this.createContainer(this.classNames.itemContentContainer, [checkbox, content]);
     }
 
     private renderButtons(item: Item) {
@@ -127,7 +129,7 @@ export class Renderer {
     // ===
 
     private createCheckbox() {
-        const checkbox = this.createDOMNode("input", this.options.classNames.itemCheckbox);
+        const checkbox = this.createDOMNode("input", this.classNames.itemCheckbox);
         checkbox.setAttribute("type", "checkbox");
 
         return checkbox;
