@@ -74,28 +74,54 @@ export class ListComponent {
 
     private subscribeItems() {
         for(const item of this.list) {
-            item.deleteBtnNode!.addEventListener("click", () => {
+            // delete button
+            item.deleteBtnNode?.addEventListener("click", () => {
                 const index = this.list.indexOf(item);
                 this.list.splice(index, 1);
                 
                 item.node!.remove();
             });
             
-            item.editBtnNode!.addEventListener("click", () => {
-                this.checkItem(item);
+            // edit button
+            item.editBtnNode?.addEventListener("click", () => {
+                item.editing = true;
+            
+                this.render();
             });
 
-            item.node!.addEventListener("click", () => {
-                this.checkItem(item);
+            // save button
+            item.saveBtnNode?.addEventListener("click", () => {
+                if(item.inputNode!.value.trim().length === 0) {
+                    return;
+                }
+
+                item.content = item.inputNode!.value;
+                item.editing = false;
+
+                this.render();
+            });
+            
+            // cancel button
+            item.cancelBtnNode?.addEventListener("click", () => {
+                item.editing = false;
+
+                this.render();
+            });
+
+            // check
+            item.node!.addEventListener("click", e => {
+                const targetTag = (e.target as HTMLElement).tagName;
+                
+                if(targetTag === "BUTTON" || item.editing === true)
+                    return;
+
+                const checked = !(item.checked);
+                
+                item.checkboxNode!.checked = checked;
+                item.checked = checked;
+
                 this.render();
             });
         }
-    }
-
-    private checkItem(item: Item) {
-        const checked = !(item.checked);
-                
-        item.checkboxNode!.checked = checked;
-        item.checked = checked;
     }
 }

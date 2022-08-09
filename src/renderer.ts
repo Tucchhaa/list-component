@@ -13,7 +13,7 @@ export class Renderer {
         this.classNames = options.classNames;
     }
 
-    render(list: Item[]) {
+    public render(list: Item[]) {
         this.container.innerHTML = "";
 
         const fragment = document.createDocumentFragment();
@@ -101,20 +101,37 @@ export class Renderer {
         return this.createContainer(this.classNames.listSection, [listNode]);
     }
 
+    // Item rendering
+    // ===
+
     private renderItem(item: Item) {
         const itemNode = this.createDOMNode("li", this.classNames.item);
+        let children = [];
 
-        const content = this.renderItemContent(item);
-        const buttons = this.renderItemButtons(item);
+        // if item is editing
+        if(item.editing) {
+            const inputContent = this.renderInputItemContent(item);
+            const buttons = this.renderItemEditingButtons(item);
 
-        const container = this.createContainer(this.classNames.itemWrapper, [content, buttons])
-
+            children = [inputContent, buttons];
+        }
+        else {
+            const content = this.renderItemContent(item);
+            const buttons = this.renderItemButtons(item);
+            
+            children = [content, buttons];
+        }
+        
+        const container = this.createContainer(this.classNames.itemWrapper, children)
+    
         itemNode.appendChild(container);
-
         item.node = itemNode;
-
+        
         return itemNode;
     }
+
+    // If item not being edited
+    // ===
 
     private renderItemContent(item: Item) {
         const checkbox = <HTMLInputElement>this.createCheckbox();
@@ -141,6 +158,29 @@ export class Renderer {
         container.setAttribute("aria-label", "delete and edit buttons");
 
         return container;
+    }
+
+    // if item is being edited
+    // ===
+
+    private renderInputItemContent(item: Item) {
+        const input = <HTMLInputElement>this.createDOMNode("input", this.classNames.input);
+        input.setAttribute("placeholder", "Item content");
+        input.value = item.content;
+
+        item.inputNode = input;
+
+        return this.createContainer("", [input]);
+    }
+
+    private renderItemEditingButtons(item: Item) {
+        const saveBtn = this.createDOMNode("button", this.classNames.saveBtn, this.options.saveBtnContent);
+        const cancelBtn = this.createDOMNode("button", this.classNames.cancelBtn, this.options.cancelBtnContent);
+
+        item.saveBtnNode = saveBtn;
+        item.cancelBtnNode = cancelBtn;
+
+        return this.createContainer(this.classNames.editingButtonsContainer, [saveBtn, cancelBtn]);
     }
 
     // ===

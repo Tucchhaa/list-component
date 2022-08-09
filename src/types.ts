@@ -7,7 +7,7 @@ export type InputOptions = {
 
 export type ClassNames = {
     list: string;
-    
+
     wrapper: string;
     topSection: string;
     inputsSection: "col-8",
@@ -25,6 +25,10 @@ export type ClassNames = {
     deleteBtn: string,
     editBtn: string,
 
+    editingButtonsContainer: string,
+    saveBtn: string,
+    cancelBtn: string,
+
     inputWrapper: string,
     inputContainer: string,
     input: string,
@@ -41,16 +45,27 @@ export type ListComponentOptions = {
     },
 
     deleteBtnContent: string,
-    editBtnContent: string
+    editBtnContent: string,
+    saveBtnContent: string,
+    cancelBtnContent: string
 }
 
 export type Item = {
     id: number;
     content: string;
+
     checked?: boolean;
+    editing?: boolean;
+    
     node?: HTMLElement;
+    
     deleteBtnNode?: HTMLElement;
     editBtnNode?: HTMLElement;
+    
+    inputNode?: HTMLInputElement;
+    saveBtnNode?: HTMLElement;
+    cancelBtnNode?: HTMLElement;
+    
     checkboxNode?: HTMLInputElement;
 }
 

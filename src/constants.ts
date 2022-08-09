@@ -10,7 +10,7 @@ export const defaultOptions: ListComponentOptions = {
 
         topSection: "row",
         inputsSection: "col-8",
-        
+
         mainSection: "row",
         listSection: "col-8",
         selectionSection: "col",
@@ -24,6 +24,10 @@ export const defaultOptions: ListComponentOptions = {
         buttonsContainer: "btn-group col-auto",
         deleteBtn: "btn btn-danger",
         editBtn: "btn btn-warning",
+
+        editingButtonsContainer: "btn-group col-auto margin-top",
+        saveBtn: "btn btn-primary",
+        cancelBtn: "btn btn-outline-danger",
 
         inputWrapper: "row margin30px",
         inputContainer: "col",
@@ -48,5 +52,7 @@ export const defaultOptions: ListComponentOptions = {
     },
 
     deleteBtnContent: "delete",
-    editBtnContent: "edit"
+    editBtnContent: "edit",
+    saveBtnContent: "save",
+    cancelBtnContent: "cancel"
 };
