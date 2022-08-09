@@ -16,46 +16,49 @@ export class Renderer {
 
         const fragment = document.createDocumentFragment();
 
-        const inputs = this.renderInputs();
-        const listNode = this.renderList(list);
+        const mainSection = this.renderMainSection(list);
+        const selectionSection = this.renderSelectionSection(list);
 
-        fragment.appendChild(inputs);
-        fragment.appendChild(listNode);
+        const wrapper = this.createContainer("row", [mainSection, selectionSection]);
+
+        fragment.appendChild(wrapper);
 
         this.container.appendChild(fragment);
     }
 
-    private renderInputs() {
-        const wrapper = this.createDOMNode("div");
+    private renderMainSection(list: Item[]) {
+        const inputs = this.renderInputs();
+        const listNode = this.renderList(list);
 
+        return this.createContainer("col", [inputs, listNode]);
+    }
+
+    private renderSelectionSection(list: Item[]) {
+        return this.createContainer("col", []);
+    }
+
+    private renderInputs() {
         const addItemInput = this.renderInput(this.options.inputs.addItem);
         const filterItemInput = this.renderInput(this.options.inputs.filterItems);
 
-        wrapper.appendChild(addItemInput);
-        wrapper.appendChild(filterItemInput);
-
-        return wrapper;
+        return this.createContainer("", [addItemInput, filterItemInput]);
     }
 
     private renderInput(inputOptions: InputOptions) {
         const { classNames } = this.options;
 
-        const wrapper = this.createDOMNode("div", classNames.inputWrapper);
-
         // Render input
-        const inputContainer = this.createDOMNode("div", classNames.inputContainer);
         const input = <HTMLInputElement>this.createDOMNode("input", classNames.input);
         input.setAttribute("name", inputOptions.name);
         input.setAttribute("placeholder", inputOptions.placeholder);
 
-        inputContainer.appendChild(input);
+        const inputContainer = this.createContainer(classNames.submitButtonContainer, [input]);
 
         // Render button
-        const buttonContainer = this.createDOMNode("div", classNames.submitButtonContainer);
         const button = this.createDOMNode("button", classNames.submitButton, inputOptions.buttonContent);
 
-        buttonContainer.appendChild(button);
-
+        const buttonContainer = this.createContainer(classNames.submitButtonContainer, [button]);
+        
         // Keep old value
         let oldValue = "";
 
@@ -66,12 +69,8 @@ export class Renderer {
 
         // Store html elements
         this.htmlElements[inputOptions.inputName] = { input, button };
-        
 
-        wrapper.appendChild(inputContainer);
-        wrapper.appendChild(buttonContainer);
-
-        return wrapper;
+        return this.createContainer(classNames.inputWrapper, [inputContainer, buttonContainer]);
     }
 
     private renderList(list: Item[]) {
@@ -88,15 +87,13 @@ export class Renderer {
 
     private renderItem(item: Item) {
         const itemNode = this.createDOMNode("li", this.options.classNames.item);
-        const wrapper = this.createDOMNode("div", this.options.classNames.itemWrapper);
 
         const content = this.renderContent(item);
         const buttons = this.renderButtons(item);
 
-        wrapper.appendChild(content);
-        wrapper.appendChild(buttons);
+        const container = this.createContainer(this.options.classNames.itemWrapper, [content, buttons])
 
-        itemNode.appendChild(wrapper);
+        itemNode.appendChild(container);
 
         item.node = itemNode;
 
@@ -104,33 +101,30 @@ export class Renderer {
     }
 
     private renderContent(item: Item) {
-        const container = this.createDOMNode("div", this.options.classNames.itemContentContainer);
-
         const checkbox = this.createCheckbox();
         const content = this.createDOMNode("span", this.options.classNames.itemContent, item.content);
-        
-        container.appendChild(checkbox);
-        container.appendChild(content);
 
-        return container;
+        return this.createContainer(this.options.classNames.itemContentContainer, [checkbox, content]);
     }
 
     private renderButtons(item: Item) {
-        const container = this.createDOMNode("div", this.options.classNames.buttonsContainer);
-        container.setAttribute("role", "group");
-        container.setAttribute("aria-label", "delete and edit buttons");
+        const { classNames } = this.options;
         
-        const editBtn = this.createDOMNode("button", this.options.classNames.editBtn, this.options.editBtnContent);
-        const deleteBtn  = this.createDOMNode("button", this.options.classNames.deleteBtn, this.options.deleteBtnContent);
-        
-        container.appendChild(editBtn);        
-        container.appendChild(deleteBtn);
+        const editBtn = this.createDOMNode("button", classNames.editBtn, this.options.editBtnContent);
+        const deleteBtn  = this.createDOMNode("button", classNames.deleteBtn, this.options.deleteBtnContent);
 
         item.deleteBtnNode = deleteBtn;
         item.editBtnNode = editBtn;
 
+        const container = this.createContainer(classNames.buttonsContainer, [editBtn, deleteBtn]);
+
+        container.setAttribute("role", "group");
+        container.setAttribute("aria-label", "delete and edit buttons");
+
         return container;
     }
+
+    // ===
 
     private createCheckbox() {
         const checkbox = this.createDOMNode("input", this.options.classNames.itemCheckbox);
@@ -145,5 +139,14 @@ export class Renderer {
         node.innerText = innerText;
 
         return node;
+    }
+
+    private createContainer(className: string, children: HTMLElement[]) {
+        const container = this.createDOMNode("div", className);
+
+        for(const child of children)
+            container.appendChild(child);
+
+        return container;
     }
 }
