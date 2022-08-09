@@ -5,8 +5,14 @@ const listClassName = "list-group";
 export const defaultOptions: ListComponentOptions = {
     classNames: {
         list: listClassName,
-        wrapper: "row",
-        mainSection: "col-8",
+
+        wrapper: "",
+
+        topSection: "row",
+        inputsSection: "col-8",
+        
+        mainSection: "row",
+        listSection: "col-8",
         selectionSection: "col",
 
         item: listClassName+"-item row",

@@ -7,8 +7,12 @@ export type InputOptions = {
 
 export type ClassNames = {
     list: string;
+    
     wrapper: string;
+    topSection: string;
+    inputsSection: "col-8",
     mainSection: string;
+    listSection: string;
     selectionSection: string;
 
     item: string;

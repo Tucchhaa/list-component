@@ -18,10 +18,10 @@ export class Renderer {
 
         const fragment = document.createDocumentFragment();
 
+        const topSection = this.renderTopSection();
         const mainSection = this.renderMainSection(list);
-        const selectionSection = this.renderSelectionSection(list);
 
-        const wrapper = this.createContainer(this.classNames.wrapper, [mainSection, selectionSection]);
+        const wrapper = this.createContainer(this.classNames.wrapper, [topSection, mainSection]);
 
         fragment.appendChild(wrapper);
 
@@ -29,10 +29,10 @@ export class Renderer {
     }
 
     private renderMainSection(list: Item[]) {
-        const inputs = this.renderInputs();
         const listNode = this.renderList(list);
+        const selectionSection = this.renderSelectionSection(list);
 
-        return this.createContainer(this.classNames.mainSection, [inputs, listNode]);
+        return this.createContainer(this.classNames.mainSection, [listNode, selectionSection]);
     }
 
     private renderSelectionSection(list: Item[]) {
@@ -49,11 +49,15 @@ export class Renderer {
         return this.createContainer(this.classNames.selectionSection, [selectedList]);
     }
 
+    private renderTopSection() {
+        return this.createContainer(this.classNames.topSection, [this.renderInputs()]);
+    }
+
     private renderInputs() {
         const addItemInput = this.renderInput(this.options.inputs.addItem);
         const filterItemInput = this.renderInput(this.options.inputs.filterItems);
 
-        return this.createContainer("", [addItemInput, filterItemInput]);
+        return this.createContainer(this.classNames.inputsSection, [addItemInput, filterItemInput]);
     }
 
     private renderInput(inputOptions: InputOptions) {
@@ -94,7 +98,7 @@ export class Renderer {
             listNode.appendChild(itemNode);
         }
 
-        return listNode;
+        return this.createContainer(this.classNames.listSection, [listNode]);
     }
 
     private renderItem(item: Item) {

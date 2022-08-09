@@ -26,10 +26,10 @@ export class ListComponent {
 
         this.renderer = new Renderer(container, this.options, this.htmlElements);
 
-        this.render(this.list);
+        this.render();
     }
 
-    private render(list: Item[]) {
+    private render(list: Item[] = this.list) {
         this.renderer.render(list);
         this.subscribe();
     }
@@ -81,14 +81,21 @@ export class ListComponent {
                 item.node!.remove();
             });
             
-            item.node!.addEventListener("click", (e) => {
-                const checked = !(item.checked);
-                
-                item.checkboxNode!.checked = checked;
-                item.checked = checked;
+            item.editBtnNode!.addEventListener("click", () => {
+                this.checkItem(item);
+            });
 
-                this.render(this.list);
+            item.node!.addEventListener("click", () => {
+                this.checkItem(item);
+                this.render();
             });
         }
+    }
+
+    private checkItem(item: Item) {
+        const checked = !(item.checked);
+                
+        item.checkboxNode!.checked = checked;
+        item.checked = checked;
     }
 }
