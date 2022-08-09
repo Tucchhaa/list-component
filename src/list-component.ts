@@ -50,9 +50,12 @@ export class ListComponent {
         const filterItemsBtn = htmlElements[inputs.filterItems.inputName]!.button;
 
         addItemBtn.addEventListener("click", () => {
+            if(addItemInput.value.trim().length === 0)
+                return;
+
             this.list.push({
                 id: ListComponent.generateId(),
-                content: addItemInput.value
+                content: addItemInput.value.trim()
             });
             
             addItemInput.value = "";
@@ -76,6 +79,15 @@ export class ListComponent {
                 this.list.splice(index, 1);
                 
                 item.node!.remove();
+            });
+            
+            item.node!.addEventListener("click", (e) => {
+                const checked = !(item.checked);
+                
+                item.checkboxNode!.checked = checked;
+                item.checked = checked;
+
+                this.render(this.list);
             });
         }
     }

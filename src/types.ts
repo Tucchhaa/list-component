@@ -43,9 +43,11 @@ export type ListComponentOptions = {
 export type Item = {
     id: number;
     content: string;
+    checked?: boolean;
     node?: HTMLElement;
     deleteBtnNode?: HTMLElement;
     editBtnNode?: HTMLElement;
+    checkboxNode?: HTMLInputElement;
 }
 
 export type InputInfo = {

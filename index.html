@@ -9,13 +9,19 @@
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <h1 class="text-center" style="margin: 30px">Cities</h1>
+    <h1 class="text-center" style="margin: 30px">List</h1>
 
     <div class="container" >
         <div id="container" style="margin: 50px"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+
+    <script src="https://unpkg.com/systemjs@6.11.0/dist/s.js"></script>
+    <script src="https://unpkg.com/systemjs@6.11.0/dist/extras/named-register.js"></script> 
+    <script src="build/bundle.js"></script>
+
+    <script type="module">System.import('index');</script>
     
     <!-- <script src="./list-component.js"></script>
     <script>
@@ -25,13 +31,5 @@
 
         new ListComponent(list, container);
     </script> -->
-
-    <script src="https://unpkg.com/systemjs@6.11.0/dist/s.js"></script>
-    <script src="https://unpkg.com/systemjs@6.11.0/dist/extras/named-register.js"></script> 
-    <script src="build/bundle.js"></script>
-
-    <script type="module">
-      System.import('index');
-    </script>
 </body>
 </html>

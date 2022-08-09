@@ -36,7 +36,17 @@ export class Renderer {
     }
 
     private renderSelectionSection(list: Item[]) {
-        return this.createContainer(this.classNames.selectionSection, []);
+        const selectedList = this.createDOMNode("ul", "list-group");
+        
+        for(const item of list) {
+            if(item.checked) {
+                const selected = this.createDOMNode("li", "list-group-item", item.content);
+
+                selectedList.appendChild(selected);
+            }
+        }
+
+        return this.createContainer(this.classNames.selectionSection, [selectedList]);
     }
 
     private renderInputs() {
@@ -54,7 +64,7 @@ export class Renderer {
         input.setAttribute("name", inputOptions.name);
         input.setAttribute("placeholder", inputOptions.placeholder);
 
-        const inputContainer = this.createContainer(classNames.submitButtonContainer, [input]);
+        const inputContainer = this.createContainer(classNames.inputContainer, [input]);
 
         // Render button
         const button = this.createDOMNode("button", classNames.submitButton, inputOptions.buttonContent);
@@ -90,8 +100,8 @@ export class Renderer {
     private renderItem(item: Item) {
         const itemNode = this.createDOMNode("li", this.classNames.item);
 
-        const content = this.renderContent(item);
-        const buttons = this.renderButtons(item);
+        const content = this.renderItemContent(item);
+        const buttons = this.renderItemButtons(item);
 
         const container = this.createContainer(this.classNames.itemWrapper, [content, buttons])
 
@@ -102,14 +112,17 @@ export class Renderer {
         return itemNode;
     }
 
-    private renderContent(item: Item) {
-        const checkbox = this.createCheckbox();
+    private renderItemContent(item: Item) {
+        const checkbox = <HTMLInputElement>this.createCheckbox();
         const content = this.createDOMNode("span", this.classNames.itemContent, item.content);
+
+        item.checkboxNode = checkbox;
+        checkbox.checked = !!item.checked;
 
         return this.createContainer(this.classNames.itemContentContainer, [checkbox, content]);
     }
 
-    private renderButtons(item: Item) {
+    private renderItemButtons(item: Item) {
         const { classNames } = this.options;
         
         const editBtn = this.createDOMNode("button", classNames.editBtn, this.options.editBtnContent);
