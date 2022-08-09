@@ -1,0 +1,22 @@
+{
+  "name": "list-component",
+  "version": "1.0.0",
+  "description": "",
+  "main": "list-component.js",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tucchhaa/list-component.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tucchhaa/list-component/issues"
+  },
+  "homepage": "https://github.com/Tucchhaa/list-component#readme"
+}
